@@ -14,15 +14,19 @@
 
    > src\service\DBconfig.js 补全Mysql数据库账号密码
 
+3. 导入数据库结构
+
+   > 根目录下ProgramEvaluation.sql
+
    
 
-3. 修改请求域名
+4. 修改请求域名
 
    > 将Ajax请求接口的域名更改为服务器真实IP
 
    
 
-4. 开启服务
+5. 开启服务
 
    ```
    node app.js (默认)
