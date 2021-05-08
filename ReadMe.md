@@ -30,7 +30,7 @@
 
    ```
    node app.js (默认)
-   pm2 start app.js --name ProgramEvaluation
+   pm2 start app.js --name ProgramEvaluation(推荐使用pm2)
    ```
 
    
