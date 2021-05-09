@@ -130,7 +130,7 @@ router.get("/Detail",function(req,res){
             }
             console.log(results_2)
             let norm_names = results_2[0]["name"].split(",");
-            let norm_detail_scores = results[0]["detail_scores"].split(",");
+            let norm_detail_scores = results_2[0]["weight"].split(",");
             var Prog_value = {
                 x:[],
                 y:[]
@@ -142,8 +142,8 @@ router.get("/Detail",function(req,res){
                 Norm_value.push({value:parseFloat(norm_detail_scores[item]),name:norm_names[item]})
             }
             for (item in results){
-                Prog_value.x.push(norm_names[item])
-                Prog_value.y.push(parseFloat(norm_detail_scores[item]))
+                Prog_value.x.push(results[item]['name'])
+                Prog_value.y.push(parseFloat(results[item]["total_score"]))
             }
             res.status(200).json({
                 errcode: 0,
