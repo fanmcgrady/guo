@@ -87,7 +87,23 @@
             , util = layui.labUtil
             , form = layui.form
             , $ = layui.jquery;
-
+        //toolbar溢出，正确绑定按钮事件
+        $(document).off('mousedown','.layui-table-grid-down').
+        on('mousedown','.layui-table-grid-down',function (event) {
+            table._tableTrCurrr = $(this).closest('td');
+        });
+        $(document).off('click','.layui-table-tips-main [lay-event]').
+        on('click','.layui-table-tips-main [lay-event]',function (event) {
+            var elem = $(this);
+            var tableTrCurrr =  table._tableTrCurrr;
+            if(!tableTrCurrr){
+                return;
+            }
+            var layerIndex = elem.closest('.layui-table-tips').attr('times');
+            console.log(layerIndex);
+            layer.close(layerIndex);
+            table._tableTrCurrr.find('[lay-event="' + elem.attr('lay-event') +           '"]').children("i").first().click();
+        });
         // //监听搜索
         // form.on('submit(LAY-app-contlist-search)', function (data) {
         //     var field = data.field;
