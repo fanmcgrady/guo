@@ -4,6 +4,9 @@ const Jwt = require('../src/service/jwt');
 var mysql = require('mysql');
 var DBconfig = require('../src/service/DBconfig');
 var xss = require('xss');
+var path=require('path');
+var fs = require('fs');
+var defpath=path.join(__dirname,'../');
 var the_Jwt = new Jwt;
 var sqlpool = the_app.sqlpool;
 sqlpool = mysql.createPool(DBconfig.mysql);
@@ -107,8 +110,8 @@ router.post("/Delete_Program", function (req, res) {
             });
             return;
         }
-        let dele_query = "DELETE FROM Program_Post WHERE id = ?";
-        connection.query(dele_query,[post_id],function(err,results){
+        let select_query = "SELECT * FROM Program_Post WHERE id = ?";
+        connection.query(select_query,[post_id],function(err,results){
             if (err) {
                 connection.release();
                 res.status(500).json({
@@ -116,16 +119,39 @@ router.post("/Delete_Program", function (req, res) {
                     ermsg: "删除失败",
                 });
                 return;
-            }else{
-                res.status(200).json({
-                    errcode: 0,
-                    ermsg: "",
-                });
-                connection.release();
-                return;
             }
-            
-        })
+            let detail_img = results[0]["detail_img"];
+
+            let dele_query = "DELETE FROM Program_Post WHERE id = ?";
+            connection.query(dele_query,[post_id],function(err_2,results_2){
+                if (err_2) {
+                    connection.release();
+                    res.status(500).json({
+                        errcode: 3,
+                        ermsg: "删除失败",
+                    });
+                    return;
+                }else{
+                    if(detail_img&&detail_img!=""){
+                        let img_path = new URL(detail_img);
+                        let true_img_path = img_path.pathname;
+                        fs.unlink(defpath+"/public/"+true_img_path,function (err) { 
+                            if (err) throw err;
+                            // 如果没有错误，则文件已成功删除
+                            // console.log('File deleted!'); 
+                         });
+                    }
+                    
+                    res.status(200).json({
+                        errcode: 0,
+                        ermsg: "",
+                    });
+                    connection.release();
+                    return;
+                }
+                
+            })
+    });
     })
 });
 router.get("/Program_Detail", function (req, res) {
